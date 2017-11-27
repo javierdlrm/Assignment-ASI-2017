@@ -1,13 +1,12 @@
 while IFS='\n' read -r line || [[ -n "$line" ]]; do
     if [ -z ${line:0:1} ] 
     then
-	echo "-Línea en blanco"
+	echo "-Línea en blanco"[ ${line:0:1} = "#" ]
     elif [ ${line:0:1} = "#" ]
     then
-	echo "-Comentario"
+	echo "-Comentaasdadasdasdrio"
     else
-	IFS=' ' read -r maquina comando config error <<< "$line"
-	
+	IFS=' ' read -r maquina comando config <<< "$line"
 	echo "Línea: $maquina $comando $config"	
     fi
 done < "$1"
