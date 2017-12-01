@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if [ $# -ne 1 ]
 then
 	echo "$0: Error de uso. Se necesita fichero_configuracion unicamente"
@@ -26,15 +25,15 @@ while IFS='\n' read -r line || [[ -n "$line" ]]; do
 		echo "Error linea $nL, Formato incorrecto, faltan parámetros: $maquina $comando $config $error"
 		exit 1
     fi
-    echo "Linea $nL correcta: $maquina $comando $config $error"
-
+    #La linea de abajo me sobra .. 
+    #echo "Linea $nL correcta: $maquina $comando $config $error"
     echo "Realizando conexión con $maquina para enviar los archivos"
     pwd=$(pwd)
     dest="/home/practicas/Escritorio"
     scp -o "StrictHostKeyChecking no" $pwd/$comando.sh $maquina:$dest
     scp -o "StrictHostKeyChecking no" $config $maquina:$dest
     echo "Realizando conexión con $maquina para realizar el ssh"
-    ssh -n -o "StrictHostKeyChecking no" $maquina $dest/$comando.sh $dest/$config; rm $dest/$comando; rm $dest/$config
+    ssh -n -o "StrictHostKeyChecking no" $maquina $dest/$comando.sh $dest/$config; rm $dest/$comando.sh; rm $dest/$config
 	#ssh -n -o "StrictHostKeyChecking no" $maquina rm -rf /home/practicas/Escritorio/funciona
     #Lineas para comprobar que se conecta
     #sudo scp -o "StrictHostKeyChecking no" $comando.sh $maquina:/home/practicas/Escritorio/pruebas
