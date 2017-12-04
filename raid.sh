@@ -16,9 +16,15 @@ if [ -z $nombre_dispos ] || [ -z $nivel ] || [ -z ${dispositivos:0:1} ]; then
 	echo "Error en el archivo $1"
 	exit 1
 fi
-#TODO: comprobar instalación de mdadm
-#TODO: instalar mdadm si necesario
+#comprobar instalación de mdadm
+#instalar mdadm si necesario
+if dpkg -s "mdadm" > /dev/null 2>&1; then
+	echo "mdadm ya está instalado"
+else
+	echo "mdadm no está instalado" 
+	apt-get -qq -y install mdadm #2>/dev/null
+fi
 #TODO: listar los dispos ($num=nº total)
 #TODO: llamada a mdadm: "mdadm -c -l $nivel -n=$num $nombre_dispos $dispositivos"
-printf "\n Fin del programa \n"
+printf "\n Fin del script $1\n"
 exit 0 

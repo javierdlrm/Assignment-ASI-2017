@@ -18,5 +18,5 @@ fi
 #TODO: Comprobar si está montado
 #TODO: Añadir en el fstab si no está	
 #TODO: Hacer el mount en si
-printf "\n Fin del programa \n"
+printf "\n Fin del script $1\n"
 exit 0 
