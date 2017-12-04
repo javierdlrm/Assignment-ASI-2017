@@ -17,6 +17,16 @@ if [ -z $nombre_dispos ] || [ -z $pto_montaje ]; then
 fi
 #TODO: Comprobar si está montado
 #TODO: Añadir en el fstab si no está	
+if grep $nombre_dispos /etc/fstab > /dev/null; then 
+	echo "Ya está en el archivo"
+	else 
+	echo "No está!"
+	linea="$nombre_dispos	$pto_montaje	auto	auto	0	0"
+	echo "Añadiendolo..."
+	echo "$linea" >> /etc/fstab
+fi
 #TODO: Hacer el mount en si
+echo "Realizando el mount"
+mount -a 
 printf "\n Fin del script $1\n"
 exit 0 

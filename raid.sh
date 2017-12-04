@@ -25,6 +25,7 @@ else
 	apt-get -qq -y install mdadm #2>/dev/null
 fi
 #TODO: listar los dispos ($num=nº total)
+echo "${dispositivos}" | awk -F"${""}" '{print NF-1}' >> $num_disp
 #TODO: llamada a mdadm: "mdadm -c -l $nivel -n=$num $nombre_dispos $dispositivos"
 printf "\n Fin del script $1\n"
 exit 0 
