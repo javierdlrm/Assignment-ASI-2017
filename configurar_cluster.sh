@@ -25,13 +25,14 @@ while IFS='\n' read -r line || [[ -n "$line" ]]; do
 		echo "Error linea $nL, Formato incorrecto, faltan parámetros: $maquina $comando $config $error"
 		exit 1
     fi
+
     #La linea de abajo me sobra .. 
     #echo "Linea $nL correcta: $maquina $comando $config $error"
     echo "Realizando conexión con $maquina para enviar los archivos"
     pwd=$(pwd)
-    dest="/home/practicas/Escritorio"
+    dest="/home/practicas/Escritorio/destino"
     scp -o "StrictHostKeyChecking no" $pwd/$comando.sh root@$maquina:$dest
-    scp -o "StrictHostKeyChecking no" $pwd/$config root@$maquina:$dest
+    scp -o "StrictHostKeyChecking no" $config root@$maquina:$dest
     echo "Realizando conexión con $maquina para realizar el ssh"
     ssh -n -o "StrictHostKeyChecking no" root@$maquina "$dest/$comando.sh $dest/$config; rm $dest/$comando.sh; rm $dest/$config"
 	#ssh -n -o "StrictHostKeyChecking no" $maquina rm -rf /home/practicas/Escritorio/funciona
