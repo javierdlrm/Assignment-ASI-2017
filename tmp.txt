@@ -1,7 +1,1 @@
-a  
-a
-b g
-b h
-h j
-j
-k
+10.0.2.7 mount mount.conf
