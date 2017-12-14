@@ -1,1 +1,1 @@
-10.0.2.7 mount mount.conf
+10.0.2.7 nfs_server nfs_server.conf

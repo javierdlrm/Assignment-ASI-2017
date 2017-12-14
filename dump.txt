@@ -1,0 +1,10 @@
+
+ Comenzando la configuración del cluster 
+Realizando conexión con 10.0.2.7 para enviar los archivos
+Realizando conexión con 10.0.2.7 para realizar el ssh
+
+ Comenzando configuración del servicio nfs_server 
+Nfs server ya está instalado
+Servidor 'rpcbind' inactivo
+
+ Fin del programa 
