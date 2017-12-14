@@ -30,7 +30,7 @@ while IFS='\n' read -r line || [[ -n "$line" ]]; do
     #echo "Linea $nL correcta: $maquina $comando $config $error"
     echo "Realizando conexión con $maquina para enviar los archivos"
     pwd=$(pwd)
-    dest="/home/practicas/Escritorio/destino"
+    dest="/home/practicas/Escritorio"
     scp -o "StrictHostKeyChecking no" $pwd/$comando.sh root@$maquina:$dest
     scp -o "StrictHostKeyChecking no" $config root@$maquina:$dest
     echo "Realizando conexión con $maquina para realizar el ssh"
