@@ -1,1 +1,4 @@
-10.0.2.7 nfs_server nfs_server.conf
+192.168.56.101 nfs_server nfs_server.conf
+192.168.56.102 nfs_server nfs_server_2.conf
+192.168.56.102 nfs_client nfs_client.conf
+192.168.56.103 nfs_client nfs_client_2.conf
