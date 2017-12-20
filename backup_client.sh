@@ -44,70 +44,77 @@ function checkValidHost() {
 }
 
 function configureBackupClient() {
-    nL=0
-    while IFS='\n' read -r line || [[ -n "$line" ]];
-    do
-        nL=$((nL+1))
 
-        # Check white line
-        if [ -z ${line:0:1} ];
-        then
-            echo " - ERROR: Fichero de configuración. No puede haber líneas en blanco. Línea $nL"
-            exit 1
-        fi
+    # Check number of lines in configuration file
+    if [[ $(sed -n '$=' $1) -ne 4 ]]
+    then
+        echo " - ERROR: Fichero de configuración. El fichero tiene que contener exactamente cuatro líneas."
+        exit 1
+    fi
 
-        IFS=' ' read localPath host remotePath hours error <<< "$line"
+    # Check parameters
+    localPath=$(sed -n 1p $1);
+    host=$(sed -n 2p $1);
+    remotePath=$(sed -n 3p $1);
+    hours=$(sed -n 4p $1);
 
-        # Check number of parameters per line
-        if [ ! -z $error ];
-        then
-            echo " - ERROR: Fichero de configuración. Demasiados parámetros. Solo se requiere la ruta local, el host, la ruta remota y la periodicidad. Línea $nL"
-            exit 1
-        fi
-        if [ -z $hours ]
-        then
-            echo " - ERROR: Fichero de configuración. Faltan parámetros. Se requiere la ruta local, el host, la ruta remota y la periodicidad. Línea $nL"
-            exit 1
-        fi
+    if [ -z $localPath ]
+    then
+        echo " - ERROR: Fichero de configuración. No puede haber líneas en blanco. Línea 1. Escriba aquí la ruta local"
+        exit 1
+    fi
+    if [ -z $host ]
+    then
+	echo " - ERROR: Fichero de configuración. No puede haber líneas en blanco. Línea 2. Escriba aquí el host"
+	exit 1
+    fi
+    if [ -z $remotePath ]
+    then
+	echo " - ERROR: Fichero de configuración. No puede haber líneas en blanco. Línea 3. Escriba aquí la ruta remota"
+	exit 1
+    fi
+    if [ -z $hours ]
+    then
+	echo " - ERROR: Fichero de configuración. No puede haber líneas en blanco. Línea 4. Escriba aquí la periodicidad en horas"
+	exit 1
+    fi
 
-	# Check directory existance
-	if [ ! -d $localPath ]
-	then
-            echo " - ERROR: El directorio '$localPath' no existe"
-            exit 1
-	fi
+    # Check directory existance
+    if [ ! -d $localPath ]
+    then
+	echo " - ERROR: El directorio '$localPath' no existe"
+        exit 1
+    fi
 
-	# Check valid host
-	checkValidHost $host
+    # Check valid host
+    checkValidHost $host
 
-	# Check remote directory existance
-	if ssh $host stat $remotePath > /dev/null 2>&1
-	then
-	    echo " - El directorio remoto existe"
-	else
-	    echo " - ERROR: El directorio remoto '$remotePath' no existe"
-	    exit 1
-	fi
+    # Check remote directory existance
+    if ssh $host stat $remotePath > /dev/null 2>&1
+    then
+	echo " - El directorio remoto existe"
+    else
+	echo " - ERROR: El directorio remoto '$remotePath' no existe"
+	exit 1
+    fi
 
-	# Check remote directory permissions
+    # Check remote directory permissions
 	# FALTA
-	echo " - Permisos de escritura activados en el directorio remoto"
+    echo " - Permisos de escritura activados en el directorio remoto"
 
-	# Configure rsync
-	echo " - Configurando rsync..."
-	rsyncCommand="rsync --recursive $localPath $host:$remotePath/"
-	$rsyncCommand > /dev/null 2>&1
+    # Configure rsync
+    echo " - Configurando rsync..."
+    rsyncCommand="rsync --recursive $localPath $host:$remotePath/"
+    $rsyncCommand > /dev/null 2>&1
 
-	# Configure crontab
-	crontabLine="0 0 0 0 0 $rsyncCommand"
-	crontabFile="/etc/crontab"
-	if ! grep -q "$crontabLine" $crontabFile
-	then
-	    echo "$crontabLine" >> $crontabFile
-	    echo " - Periodicidad configurada cada $hours horas"
-	fi
-       
-    done < "$1"
+    # Configure crontab
+    crontabLine="0 0/$hours 0 0 0 $rsyncCommand"
+    crontabFile="/etc/crontab"
+    if ! grep -q "$crontabLine" $crontabFile
+    then
+	echo "$crontabLine" >> $crontabFile
+	echo " - Periodicidad configurada cada $hours horas"
+    fi
 }
 
 #
