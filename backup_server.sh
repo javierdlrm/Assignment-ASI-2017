@@ -15,13 +15,13 @@ function checkParameters() {
 function configureBackupServer() {
 
     # Check number of lines in configuration file
-    if [[ $(wc -l <$1) -ne 1 ]]
+    if [[ $(sed -n '$=' $1) -ne 1 ]]
     then
-	echo " - ERROR: Fichero de configuración. No puede haber más de una línea"
+	echo " - ERROR: Fichero de configuración. El fichero tiene que contener exactamente una línea."
 	exit 1
     fi
 
-    IFS=' ' read path error
+    IFS=' ' read path error <<< "$(head -n 1 $1)"
     
     # Check number of parameters per line
     if [ ! -z $error ]

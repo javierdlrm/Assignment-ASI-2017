@@ -1,0 +1,2 @@
+192.168.56.101 backup_server backup_server.conf
+192.168.56.102 backup_client backup_client.conf
