@@ -6,7 +6,7 @@ then
 	exit 1
 fi
 
-printf "Comenzando el lvm \n"
+printf "\n Comenzando el lvm \n"
 
 #sed 'NUMq;d' file
 nombre_grupo=`sed "1q;d" $1`
