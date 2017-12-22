@@ -6,20 +6,20 @@ then
   exit 1
 fi
 
-printf "Comenzando el mount \n"
+printf "\nComenzando el mount \n"
 #sed 'NUMq;d' file
 nombre_dispos=`sed "1q;d" $1`
 pto_montaje=`sed "2q;d" $1`
-
-if [ ! -d $pto_montaje ]; then
-  echo "La carpeta no existe. Se procedera a crear"
-  mkdir -p $pto_montaje
-fi  
 
 if [ -z $nombre_dispos ] || [ -z $pto_montaje ]; then 
   echo "Error en el archivo $1"
   exit 1
 fi
+
+if [ ! -d $pto_montaje ]; then
+  echo "La carpeta no existe. Se procedera a crear"
+  mkdir -p $pto_montaje
+fi  
 
 echo "$nombre_dispos en $pto_montaje"
 #TODO: Comprobar si está montado
@@ -32,5 +32,5 @@ fi
 #TODO: Hacer el mount en si
 echo "Realizando el mount"
 sudo mount -a || { echo "Error al ejecutar mount."; exit 1; }
-printf "Fin del script $1\n"
+printf "\n Fin del script $1\n"
 exit 0
