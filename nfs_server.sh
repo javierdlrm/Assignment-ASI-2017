@@ -140,6 +140,7 @@ function exportPath() {
         done
         echo " - - Aplicando exportaciones..."
         exportfs -ra > /dev/null 2>&1
+	echo " - - Exportación aplicada"
 }
 
 function configureNFS() {
