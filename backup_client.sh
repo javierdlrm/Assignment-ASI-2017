@@ -99,12 +99,19 @@ function configureBackupClient() {
     fi
 
     # Check remote directory permissions
-	# FALTA
-    echo " - Permisos de escritura activados en el directorio remoto"
+    draftFile="draft.txt"
+    if ssh $host touch "$remotePath/$draftFile" > /dev/null 2>&1
+    then
+	ssh $host rm "$remotePath/$draftFile" > /dev/null 2>&1
+	echo " - Permisos de escritura habilitados en el directorio remoto";
+    else
+	echo " - ERROR: Permisos de escritura no habilitados en el directorio remoto";
+	exit 1
+    fi
 
     # Configure rsync
     echo " - Configurando rsync..."
-    rsyncCommand="rsync --recursive $localPath $host:$remotePath/"
+    rsyncCommand="rsync --recursive $localPath root@$host:$remotePath"
     $rsyncCommand > /dev/null 2>&1
 
     # Configure crontab
@@ -114,6 +121,8 @@ function configureBackupClient() {
     then
 	echo "$crontabLine" >> $crontabFile
 	echo " - Periodicidad configurada cada $hours horas"
+    else
+	echo " - Periodicidad ya configurada cada $hours horas"
     fi
 }
 
