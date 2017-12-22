@@ -12,6 +12,29 @@ function checkParameters() {
     fi 
 }
 
+function checkRsyncInstallation() {
+
+    echo " - Comprobando instalación de paquetes requeridos"
+
+    rsync_package="rsync"
+
+    if dpkg -s $rsync_package > /dev/null 2>&1
+    then
+        echo " - - Paquete '$rsync_package' ya está instalado"
+    else
+        echo " - - Instalando '$rsync_package'..."
+        apt-get -qq -y install $rsync_package 2>&1
+
+        if dpkg -s $rsync_package > /dev/null 2>&1
+        then
+            echo " - - Paquete '$rsync_package' instalado"
+        else
+            echo " - - ERROR: No se pudo instalar el paquete '$rsync_package'"
+            exit 1
+        fi
+    fi
+}
+
 function configureBackupServer() {
 
     # Check number of lines in configuration file
@@ -43,6 +66,8 @@ function configureBackupServer() {
 	echo " - ERROR: El directorio '$path' no está vacío"
 	exit 1
     fi
+
+    
 }
 
 #
@@ -52,6 +77,7 @@ function configureBackupServer() {
 printf "\nComenzando configuración del servicio backup_server\n"
 
 checkParameters $@
+checkRsyncInstallation
 configureBackupServer $1
 
 printf "\nFin de la configuración del servicio backup_server\n"
