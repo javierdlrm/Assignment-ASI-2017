@@ -71,14 +71,14 @@ fi
 mv yp.temp /etc/yp.conf
 
 #Añadimos los parametros de configuración necesarios
-echo "Cambiamos los datos del nsswich.conf"
-cp /etc/nsswich.conf nss.temp
+echo "Cambiamos los datos del nsswitch.conf"
+cp /etc/nsswitch.conf nss.temp
 if ! grep -w "compat nis" nss.temp > /dev/null; then 
-	sed -i -e 's/compat/compat nis/' /etc/nsswich.conf
-	sed -i -e '/^hosts:/ s/$/ nis/' /etc/nsswich.conf 
+	sed -i -e 's/compat/compat nis/' nss.temp
+	sed -i -e '/^hosts:/ s/$/ nis/' nss.temp 
 	#con este formato es como un "append"
 fi
-mv nss.temp /etc/nsswich
+mv nss.temp /etc/nsswitch.conf
 
 echo "Reseteamos el servicio NIS"
 
