@@ -6,7 +6,7 @@ then
 fi
 
 printf "\n Comenzando el raid \n"
-#sed 'NUMq;d' file
+
 nombre_dispos=`sed "1q;d" $1`
 nivel=`sed "2q;d" $1`
 dispositivos=`sed "3q;d" $1`
@@ -18,17 +18,15 @@ fi
 
 #comprobar instalación de mdadm
 #instalar mdadm si necesario
+echo "Comprobando śi esta instalado mdadm:"
 if dpkg -s "mdadm" > /dev/null 2>&1; then
 	echo "mdadm ya está instalado"
 else
-	echo "mdadm no está instalado" 
+	echo "mdadm no está instalado. Procediedo a instalacion" 
 	apt-get -qq -y install mdadm #2>/dev/null
 fi
 
-sudo mdadm --create --level=$nivel -R --raid-devices=$(wc -w <<< "$dispositivos") $nombre_dispos $dispositivos
-#PARA ELIMINAR:
-#mdadm --stop /dev/md0 (O el nombre_dispos que se ha utilizado)
-#mdadm --remove /dev/md0 (O el nombre_dispos que se ha utilizado)
-
-printf "\n Fin del script $1\n"
-exit 0 
+sudo mdadm --create --level=$nivel -R --raid-devices=$(wc -w <<< "$dispositivos") $nombre_dispos $dispositivos && printf "\n Fin del script $1\n" exit 0 || exit 1
+#PARA ELIMINAR raid en un futuro:
+#sudo mdadm --stop /dev/md0 (O el nombre_dispos que se ha utilizado)
+#sudo mdadm --remove /dev/md0 (O el nombre_dispos que se ha utilizado)
