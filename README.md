@@ -1,2 +1,2 @@
-# Practica-ASI-2017
-Práctica Script maestro para la configuración de un cluster Linux
+# Assignment-ASI-2017
+Master script to configure a distributed cluster in Linux
